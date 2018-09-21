@@ -201,7 +201,7 @@ void ExpressionAction::prepare(Block & sample_block, const Settings & settings)
 
             size_t result_position = sample_block.columns();
             sample_block.insert({nullptr, result_type, result_name});
-            function = function_base->prepare(sample_block, arguments);
+            function = function_base->prepare(sample_block, arguments, result_position);
 
             if (auto * prepared_function = typeid_cast<PreparedFunctionImpl *>(function.get()))
                 prepared_function->createLowCardinalityResultCache(settings.max_threads);
@@ -685,7 +685,7 @@ void ExpressionActions::addImpl(ExpressionAction action, Names & new_names)
         }
 
         action.function_base = action.function_builder->build(arguments);
-        action.result_type = action.function->getReturnType();
+        action.result_type = action.function_base->getReturnType();
         action.function = action.function_base->prepare(sample_block);
     }
 
