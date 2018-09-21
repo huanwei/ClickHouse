@@ -453,7 +453,7 @@ void PreparedFunctionImpl::execute(Block & block, const ColumnNumbers & args, si
                 auto cached_values = low_cardinality_result_cache->get(key);
                 if (cached_values)
                 {
-                    auto indexes = cached_values->index_mappe->index(low_cardinality_column->getIndexes(), 0);
+                    auto indexes = cached_values->index_mapping->index(low_cardinality_column->getIndexes(), 0);
                     res.column = ColumnWithDictionary::create(cached_values->function_result, indexes, true);
                     return;
                 }
@@ -469,7 +469,7 @@ void PreparedFunctionImpl::execute(Block & block, const ColumnNumbers & args, si
             if (auto full_column = keys->convertToFullColumnIfConst())
                 keys = full_column;
 
-            auto res_mut_dictionary = DataTypeWithDictionary::createColumnUnique(res_type_with_dict->getDictionaryType());
+            auto res_mut_dictionary = DataTypeWithDictionary::createColumnUnique(*res_type_with_dict->getDictionaryType());
             auto res_indexes = res_dictionary->uniqueInsertRangeFrom(*keys, 0, keys->size());
             auto res_dictionary = std::move(res_mut_dictionary);
 
