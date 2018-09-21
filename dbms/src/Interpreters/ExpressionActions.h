@@ -26,7 +26,7 @@ using NamesWithAliases = std::vector<NameWithAlias>;
 class Join;
 
 class IPreparedFunction;
-using IPreparedFunctionPtr = std::shared_ptr<IPreparedFunction>;
+using PreparedFunctionPtr = std::shared_ptr<IPreparedFunction>;
 
 class IFunctionBase;
 using FunctionBasePtr = std::shared_ptr<IFunctionBase>;
