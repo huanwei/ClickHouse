@@ -356,7 +356,7 @@ static const ColumnWithDictionary * findLowCardinalityArgument(const Block & blo
 
     for (auto arg : args)
     {
-        ColumnWithTypeAndName & column = block.getByPosition(arg);
+        const ColumnWithTypeAndName & column = block.getByPosition(arg);
         if (auto * low_cardinality_column = checkAndGetColumn<ColumnWithDictionary>(column.column.get()))
         {
             if (result_column)
@@ -443,7 +443,7 @@ void PreparedFunctionImpl::execute(Block & block, const ColumnNumbers & args, si
             bool use_cache = low_cardinality_result_cache
                              && low_cardinality_column && low_cardinality_column->isSharedDictionary();
             ColumnUniquePtr dictionary;
-            PreparedFunctionLowCardinalityResultCache::DictHashKey key;
+            PreparedFunctionLowCardinalityResultCache::DictionaryKeyHash key;
 
             if (use_cache)
             {
