@@ -686,7 +686,6 @@ void ExpressionActions::addImpl(ExpressionAction action, Names & new_names)
 
         action.function_base = action.function_builder->build(arguments);
         action.result_type = action.function_base->getReturnType();
-        action.function = action.function_base->prepare(sample_block);
     }
 
     action.prepare(sample_block, settings);
