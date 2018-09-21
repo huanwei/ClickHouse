@@ -30,9 +30,10 @@ public:
         return ColumnWithDictionary::create(column_unique_->assumeMutable(), indexes_->assumeMutable(), is_shared);
     }
 
-    template <typename ... Args, typename = typename std::enable_if<IsMutableColumns<Args ...>::value>::type>
-    static MutablePtr create(Args &&... args) { return Base::create(std::forward<Args>(args)...); }
-
+    static MutablePtr create(MutableColumnPtr && column_unique, MutableColumnPtr && indexes, bool is_shared = false)
+    {
+        return Base::create(std::move(column_unique), std::move(indexes), is_shared);
+    }
 
     std::string getName() const override { return "ColumnWithDictionary"; }
     const char * getFamilyName() const override { return "ColumnWithDictionary"; }
