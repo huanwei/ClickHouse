@@ -492,7 +492,7 @@ LLVMFunction::LLVMFunction(const ExpressionActions::Actions & actions, std::shar
     for (const auto & action : actions)
     {
         const auto & names = action.argument_names;
-        const auto & types = action.function->getArgumentTypes();
+        const auto & types = action.function_base->getArgumentTypes();
         std::vector<CompilableExpression> args;
         for (size_t i = 0; i < names.size(); ++i)
         {
@@ -504,8 +504,8 @@ LLVMFunction::LLVMFunction(const ExpressionActions::Actions & actions, std::shar
             }
             args.push_back(inserted.first->second);
         }
-        subexpressions[action.result_name] = subexpression(*action.function, std::move(args));
-        originals.push_back(action.function);
+        subexpressions[action.result_name] = subexpression(*action.function_base, std::move(args));
+        originals.push_back(action.function_base);
     }
     compileFunctionToLLVMByteCode(context, *this);
 }
