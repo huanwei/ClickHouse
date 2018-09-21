@@ -470,8 +470,8 @@ void PreparedFunctionImpl::execute(Block & block, const ColumnNumbers & args, si
                 keys = full_column;
 
             auto res_mut_dictionary = DataTypeWithDictionary::createColumnUnique(*res_type_with_dict->getDictionaryType());
-            auto res_indexes = res_mut_dictionary->uniqueInsertRangeFrom(*keys, 0, keys->size());
-            auto res_dictionary = std::move(res_mut_dictionary);
+            ColumnPtr res_indexes = res_mut_dictionary->uniqueInsertRangeFrom(*keys, 0, keys->size());
+            ColumnUniquePtr res_dictionary = std::move(res_mut_dictionary);
 
             if (indexes)
             {
