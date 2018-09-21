@@ -480,11 +480,11 @@ void PreparedFunctionImpl::execute(Block & block, const ColumnNumbers & args, si
                     auto cache_values = std::make_shared<PreparedFunctionLowCardinalityResultCache::CachedValues>();
                     cache_values->dictionary_holder = low_cardinality_column->getDictionaryPtr();
                     cache_values->function_result = res_dictionary;
-                    cache_values->index_mapper = res_indexes;
+                    cache_values->index_mapping = res_indexes;
 
                     cache_values = low_cardinality_result_cache->getOrSet(key, cache_values);
                     res_dictionary = cache_values->function_result;
-                    res_indexes = cache_values->index_mapper;
+                    res_indexes = cache_values->index_mapping;
                 }
 
                 res.column = ColumnWithDictionary::create(res_dictionary, res_indexes->index(*indexes, 0), use_cache);
