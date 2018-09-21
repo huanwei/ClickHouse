@@ -443,7 +443,7 @@ void PreparedFunctionImpl::execute(Block & block, const ColumnNumbers & args, si
             bool use_cache = low_cardinality_result_cache
                              && low_cardinality_column && low_cardinality_column->isSharedDictionary();
             ColumnUniquePtr dictionary;
-            PreparedFunctionLowCardinalityResultCache::DictionaryKeyHash key;
+            PreparedFunctionLowCardinalityResultCache::DictionaryKey key;
 
             if (use_cache)
             {
