@@ -17,7 +17,7 @@ class ColumnWithDictionary final : public COWPtrHelper<IColumn, ColumnWithDictio
 {
     friend class COWPtrHelper<IColumn, ColumnWithDictionary>;
 
-    ColumnWithDictionary(MutableColumnPtr && column_unique, MutableColumnPtr && indexes);
+    ColumnWithDictionary(MutableColumnPtr && column_unique, MutableColumnPtr && indexes, bool is_shared = false);
     ColumnWithDictionary(const ColumnWithDictionary & other) = default;
 
 public:
@@ -25,9 +25,9 @@ public:
       * Use IColumn::mutate in order to make mutable column and mutate shared nested columns.
       */
     using Base = COWPtrHelper<IColumn, ColumnWithDictionary>;
-    static Ptr create(const ColumnPtr & column_unique_, const ColumnPtr & indexes_)
+    static Ptr create(const ColumnPtr & column_unique_, const ColumnPtr & indexes_, bool is_shared = false)
     {
-        return ColumnWithDictionary::create(column_unique_->assumeMutable(), indexes_->assumeMutable());
+        return ColumnWithDictionary::create(column_unique_->assumeMutable(), indexes_->assumeMutable(), is_shared);
     }
 
     template <typename ... Args, typename = typename std::enable_if<IsMutableColumns<Args ...>::value>::type>
@@ -165,8 +165,6 @@ public:
 
     ///void setIndexes(MutableColumnPtr && indexes_) { indexes = std::move(indexes_); }
 
-    /// Set shared ColumnUnique for empty column with dictionary.
-    void setSharedDictionary(const ColumnPtr & column_unique);
     bool isSharedDictionary() const { return dictionary.isShared(); }
 
     /// Create column new dictionary with only keys that are mentioned in index.
@@ -240,8 +238,8 @@ private:
     {
     public:
         Dictionary(const Dictionary & other) = default;
-        explicit Dictionary(MutableColumnPtr && column_unique);
-        explicit Dictionary(ColumnPtr column_unique);
+        explicit Dictionary(MutableColumnPtr && column_unique, bool is_shared);
+        explicit Dictionary(ColumnPtr column_unique, bool is_shared);
 
         const ColumnPtr & getColumnUniquePtr() const { return column_unique; }
         ColumnPtr & getColumnUniquePtr() { return column_unique; }

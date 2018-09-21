@@ -510,7 +510,7 @@ LLVMFunction::LLVMFunction(const ExpressionActions::Actions & actions, std::shar
     compileFunctionToLLVMByteCode(context, *this);
 }
 
-PreparedFunctionPtr LLVMFunction::prepare(const Block &) const { return std::make_shared<LLVMPreparedFunction>(name, context); }
+PreparedFunctionPtr LLVMFunction::prepare(const Block &, const ColumnNumbers &, size_t) const { return std::make_shared<LLVMPreparedFunction>(name, context); }
 
 bool LLVMFunction::isDeterministic() const
 {
