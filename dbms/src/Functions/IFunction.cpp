@@ -442,13 +442,12 @@ void PreparedFunctionImpl::execute(Block & block, const ColumnNumbers & args, si
             const auto * low_cardinality_column = findLowCardinalityArgument(block, args);
             bool use_cache = low_cardinality_result_cache
                              && low_cardinality_column && low_cardinality_column->isSharedDictionary();
-            ColumnUniquePtr dictionary;
             PreparedFunctionLowCardinalityResultCache::DictionaryKey key;
 
             if (use_cache)
             {
-                dictionary = low_cardinality_column->getDictionaryPtr();
-                key = {dictionary->getHash(), dictionary->size()};
+                const auto & dictionary = low_cardinality_column->getDictionary();
+                key = {dictionary.getHash(), dictionary.size()};
 
                 auto cached_values = low_cardinality_result_cache->get(key);
                 if (cached_values)
