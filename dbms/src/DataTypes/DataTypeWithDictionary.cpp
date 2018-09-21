@@ -647,12 +647,11 @@ void DataTypeWithDictionary::deserializeBinaryBulkWithMultipleStreams(
         }
         else if (!has_additional_keys)
         {
-            auto local_column = ColumnWithDictionary::create(global_dictionary, std::move(indexes_column), true);
-
             if (column_is_empty)
-                column_with_dictionary = std::move(local_column);
-            else
-                column_with_dictionary.insertRangeFrom(*local_column, 0, num_rows);
+                column_with_dictionary.setSharedDictionary(global_dictionary);
+
+            auto local_column = ColumnWithDictionary::create(global_dictionary, std::move(indexes_column));
+            column_with_dictionary.insertRangeFrom(*local_column, 0, num_rows);
         }
         else
         {

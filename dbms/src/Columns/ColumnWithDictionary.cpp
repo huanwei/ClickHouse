@@ -301,6 +301,15 @@ std::vector<MutableColumnPtr> ColumnWithDictionary::scatter(ColumnIndex num_colu
     return columns;
 }
 
+void ColumnWithDictionary::setSharedDictionary(const ColumnPtr & column_unique)
+{
+    if (!empty())
+        throw Exception("Can't set ColumnUnique for ColumnWithDictionary because is't not empty.",
+                        ErrorCodes::LOGICAL_ERROR);
+
+    dictionary.setShared(column_unique);
+}
+
 ColumnWithDictionary::MutablePtr ColumnWithDictionary::compact()
 {
     auto positions = idx.getPositions();
