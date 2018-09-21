@@ -47,6 +47,7 @@ using PreparedFunctionPtr = std::shared_ptr<IPreparedFunction>;
 
 /// Cache for functions result if it was executed on low cardinality column.
 class PreparedFunctionLowCardinalityResultCache;
+using PreparedFunctionLowCardinalityResultCachePtr = std::shared_ptr<PreparedFunctionLowCardinalityResultCache>;
 
 class PreparedFunctionImpl : public IPreparedFunction
 {
@@ -99,7 +100,7 @@ private:
                                              size_t input_rows_count);
 
     /// Cache is created by function createLowCardinalityResultCache()
-    std::unique_ptr<PreparedFunctionLowCardinalityResultCache> low_cardinality_result_cache;
+    PreparedFunctionLowCardinalityResultCachePtr low_cardinality_result_cache;
 };
 
 using ValuePlaceholders = std::vector<std::function<llvm::Value * ()>>;
